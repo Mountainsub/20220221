@@ -7,7 +7,7 @@ import os
 
 sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 
-from request5.rakuten_rss import rss , rss2 
+from request.rakuten_rss import rss , rss2 
 from lib.ddeclient import DDEClient
 import datetime
 
@@ -41,13 +41,14 @@ if __name__ == '__main__':
     # コマンドライン引数を取得
     args = sys.argv
     # count番目からcount+125番目までデータの総計を出す
-    count = int(args[2])*126 
+    
     
     # コマンドライン引数の１番目で書き込みか読み取りかを選択
     num = args[1]
     temp = 0
     
     if int(num) == 0: #　書き込み
+        count = int(args[2])*126 
         for line in Function.get_lines(cmd='python main2.py ' + str(count)+ ' T'): # ファイル読み込み　第一引数はスタートナンバー                
             # python main2.pyは計算して書き込みを行うコマンドです。
             string = "file_"+ str(int(args[2])) + ".txt"
