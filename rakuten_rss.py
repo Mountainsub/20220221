@@ -41,8 +41,8 @@ def rss(item, k):
 	for i,j in enumerate(indexes_code, start = k): 
 		count += 1
 		
-		if k==2142 and (count==24):
-			continue
+		if k==2142 and count == 24:
+			True
 		#print(count)
 		try:
 			dde = DDEClient("rss", indexes_code[i])
@@ -52,20 +52,29 @@ def rss(item, k):
 		
 		if True:	
 			try:
-				dde.request(item).decode("sjis")
+				val = dde.request(item).decode("sjis")
 			except Exception:
-				pass
-			else:
 				try:
-					calc += float(dde.request(item).decode("sjis")) * float(indexes["TOPIXに占める個別銘柄のウェイト"][i] )* 0.01
+					val = dde.request("始値").decode("sjis")
 				except Exception:
+					val = 0
 					pass
+				else:
+					name = dde.request("銘柄名称").decode("sjis")
+					with open("check4.txt", "a", newline= "\n") as f:
+						f.write(name+"\n")
+					pass
+			finally:
+				calc += float(val) * float(indexes["TOPIXに占める個別銘柄のウェイト"][i] )* 0.01
+				with open("check3.txt", "a", newline= "\n") as f:
+					tup = (val,indexes["TOPIXに占める個別銘柄のウェイト"][i] )
+					f.write(str(tup)+"\n")
 				del dde
 				if count >= 126:
 					break
 				if k == 2142:
-					if count == 24:
-						break 
+					if count == 44:
+						continue 
 
 	pocket = [calc, dde_ware, indexes["TOPIXに占める個別銘柄のウェイト"], k+count]
 	
